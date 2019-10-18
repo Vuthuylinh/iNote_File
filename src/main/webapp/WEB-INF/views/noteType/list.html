@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>noteTypes</title>
+</head>
+<body>
+<a href="/create-noteType">Create new NoteType</a>
+Select Note Type
+<form th:action="@{/note/noteType}" method="get">
+    <select name = "noteTypeId">
+        <option th:each="p : ${noteTypes}" th:value="${p.id}" th:text="${p.typeName}"></option>
+    </select>
+    <input type="submit" value="Search">
+</form>
+<h1>NoteTypes</h1>
+<table border="1">
+    <tr>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Edit</th>
+        <th>Delete</th>
+        <th>View</th>
+    </tr>
+    <th:block th:each="noteType : ${noteTypes}">
+        <tr>
+            <td th:text="${noteType.typeName}"></td>
+            <td th:text="${noteType.description}"></td>
+            <td><a th:href="@{/edit-noteType/__${noteType.id}__ }">Edit</a></td>
+            <td><a th:href="@{/delete-noteType/__${noteType.id}__ }">Delete</a></td>
+            <td><a th:href="@{/view-noteType/__${noteType.id}__}">View</a></td>
+        </tr>
+    </th:block>
+</table>
+</body>
+</html>

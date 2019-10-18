@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<a href="/create-note">Create new note</a>
+<h1>Notes</h1>
+<th:block th:if="${message}">
+    <p th:text="${message}" style="color: red"></p>
+</th:block>
+<p>
+    <a th:href="@{/note/writeJSON}">Export JSON</a>
+</p>
+<p>
+    <a th:href="@{/note/importJSON}">Insert note from .json file</a>
+</p>
+<p>
+    <a th:href="@{/note/excel}">Export Excel</a>
+</p>
+<p>
+    <a th:href="@{/note/importExcel}">Insert note from .xls file</a>
+</p>
+
+<form>
+    Search by Title:
+    <input name="s" type="text"/>
+    <input type="submit" value="Search"/>
+</form><br/>
+<h3>
+    Select Note Type
+    <form th:action="@{/note/noteType}" method="get">
+        <select name = "noteTypeId">
+            <option th:each="p : ${noteTypes}" th:value="${p.id}" th:text="${p.typeName}"></option>
+        </select>
+        <input type="submit" value="Search">
+    </form>
+</h3>
+
+<table border="1">
+    <tr>
+        <th>ID</th>
+        <th>Title</th>
+        <th>Content</th>
+        <th>Note Type</th>
+        <th>Edit</th>
+        <th>Delete</th>
+    </tr>
+    <th:block th:each="note : ${notes}">
+        <tr>
+            <td th:text="${note.id}"></td>
+            <td th:text="${note.title}"></td>
+            <td th:text="${note.content}"></td>
+            <td th:text="${note.noteType.typeName}"></td>
+            <td><a th:href="@{/edit-note/__${note.id}__ }">Edit</a></td>
+            <td><a th:href="@{/delete-note/__${note.id}__ }">Delete</a></td>
+        </tr>
+    </th:block>
+</table>
+
+<div th:if="${titleSearch}">
+    <span th:each="notePage: ${notePages}">
+        <a th:href="@{'/notes?page=' + ${notePage} + '&s=' + ${titleSearch}}" th:text="${notePage + 1}" th:if="${notePage != notes.number}"></a>
+        <a th:if="${notePage == notes.number}" th:text="${'['+(notePage + 1)+']'}"></a>
+    </span>
+</div>
+<div th:if="${titleSearch} == null">
+    <span th:each="notePage: ${notePages}">
+        <a th:href="@{'/notes?page=' + ${notePage}}" th:text="${notePage + 1}" th:if="${notePage != notes.number}"></a>
+        <a th:if="${notePage == notes.number}" th:text="${'['+(notePage + 1)+']'}"></a>
+    </span>
+</div>
+
+</body>
+</html>
